@@ -1,1 +1,0 @@
-# financial-transaction-management-system
