@@ -23,7 +23,8 @@ public class AccountService {
     }
 
     public Account createAccount(Account account) {
-        return accountRepository.save(account);
+        Account savedAccount = accountRepository.save(account);
+        return savedAccount;
     }
 
     public Account updateAccount(Long id, Account accountDetails) {

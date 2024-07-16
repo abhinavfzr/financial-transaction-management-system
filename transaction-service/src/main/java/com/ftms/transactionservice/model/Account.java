@@ -1,5 +1,6 @@
 package com.ftms.transactionservice.model;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,17 +12,13 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Entity
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class Transaction {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class Account {
     private Long id;
-    private Long accountId;
-    private Double amount;
-    private String type; // DEBIT, CREDIT
-    private String status; // PENDING, COMPLETED
+    private String name;
+    private String email;
+    private Double balance;
 }

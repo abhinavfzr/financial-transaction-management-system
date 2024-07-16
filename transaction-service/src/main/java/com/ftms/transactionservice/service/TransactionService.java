@@ -1,10 +1,12 @@
 package com.ftms.transactionservice.service;;
 
+import com.ftms.transactionservice.exception.InsufficientBalanceException;
 import com.ftms.transactionservice.model.Transaction;
 import com.ftms.transactionservice.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,11 +16,10 @@ public class TransactionService {
 
     @Autowired
     private TransactionRepository transactionRepository;
-
     @Autowired
-    private KafkaTemplate<String, Transaction> kafkaTemplate;
-
-    private static final String TOPIC = "transaction_topic";
+    private  TransactionProducer transactionProducer;
+    @Autowired
+    private AccountService accountService;
 
     public List<Transaction> getAllTransactions() {
         return transactionRepository.findAll();
@@ -27,24 +28,17 @@ public class TransactionService {
     public Optional<Transaction> getTransactionById(Long id) {
         return transactionRepository.findById(id);
     }
-
+    @Transactional
     public Transaction createTransaction(Transaction transaction) {
+        // Initialize transaction status as PENDING
+        transaction.setStatus("PENDING");
+        // Check account balance and process the transaction
+        if (!accountService.processTransaction(transaction)) {
+            throw new InsufficientBalanceException("Insufficient balance");
+        }
         Transaction savedTransaction = transactionRepository.save(transaction);
-        kafkaTemplate.send(TOPIC, savedTransaction);
+        transactionProducer.sendMessage(savedTransaction);
         return savedTransaction;
     }
 
-    public Transaction updateTransaction(Long id, Transaction transactionDetails) {
-        Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Transaction not found"));
-        transaction.setAccountId(transactionDetails.getAccountId());
-        transaction.setAmount(transactionDetails.getAmount());
-        transaction.setType(transactionDetails.getType());
-        transaction.setStatus(transactionDetails.getStatus());
-        return transactionRepository.save(transaction);
-    }
-
-    public void deleteTransaction(Long id) {
-        transactionRepository.deleteById(id);
-    }
 }

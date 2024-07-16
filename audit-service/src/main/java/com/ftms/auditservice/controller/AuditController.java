@@ -1,6 +1,6 @@
 package com.ftms.auditservice.controller;
 
-import com.ftms.auditservice.model.Audit;
+import com.ftms.auditservice.model.Transaction;
 import com.ftms.auditservice.service.AuditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ public class AuditController {
     private AuditService auditService;
 
     @GetMapping
-    public List<Audit> getAllAudits() {
+    public List<Transaction> getAllAudits() {
         return auditService.findAll();
     }
 }
