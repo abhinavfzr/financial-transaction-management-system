@@ -21,12 +21,8 @@ public class AccountService {
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
             if ("DEBIT".equals(transaction.getType()) && account.getBalance() + transaction.getAmount() >= 0) {
-                account.setBalance(account.getBalance() + transaction.getAmount());
-                updateAccount(account);
                 return true;
             } else if ("CREDIT".equals(transaction.getType())) {
-                account.setBalance(account.getBalance() + transaction.getAmount());
-                updateAccount(account);
                 return true;
             }
         }
@@ -37,7 +33,4 @@ public class AccountService {
         return Optional.ofNullable(restTemplate.getForObject(ACCOUNT_SERVICE_URL + "/" + accountId, Account.class));
     }
 
-    private void updateAccount(Account account) {
-        restTemplate.put(ACCOUNT_SERVICE_URL + "/" + account.getId(), account);
-    }
 }

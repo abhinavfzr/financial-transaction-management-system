@@ -22,4 +22,15 @@ public class Transaction implements Serializable {
     private Double amount;
     private String type; // DEBIT, CREDIT
     private String status; // PENDING, COMPLETED
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", accountId=" + accountId +
+                ", amount=" + amount +
+                ", type='" + type + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

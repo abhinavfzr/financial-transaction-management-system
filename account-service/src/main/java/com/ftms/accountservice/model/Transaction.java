@@ -1,4 +1,4 @@
-package com.ftms.auditservice.model;
+package com.ftms.accountservice.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,16 +9,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
-
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Transaction{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class Transaction {
     private Long id;
     private Long accountId;
     private Double amount;
